@@ -26,21 +26,12 @@ const myTabNavigator = TabNavigator({
     },
     swipeEnabled: true,
     animationEnabled: true,
-    /*lazy:true,*/
 });
 const MyApp = StackNavigator({
     myTabNavigator: {screen: myTabNavigator},
     /*Detail: {screen: Detail},
     Login: {screen: Login},*/
 }, {
-    onTransitionEnd() {
-        //console.log(this.navigation);
-        if (this.navigation.state.routes[0].index === 1) {
-            const headerMode = 'none', mode = 'modal';
-        } else {
-            const headerMode = 'screen', mode = 'card';
-        }
-    },
     headerMode: 'screen',
     translucent: true,
     style: {
@@ -52,18 +43,7 @@ const MyApp = StackNavigator({
 class Sshare extends Component {
     constructor(props) {
         super(props);
-        this.state = {showCreateModal: false};
-        console.log(this.navigation);
-        //this.props.dispatch(showModal());
-        /*if(this.navigation.state.routeName === "Create"){
-            console.log('123');
-        }*/
-        console.log(this.props);
     }
-
-    showModal = () => {
-        console.log('12323')
-    };
 
     shouldComponentUpdate(nextProps, nextState) {
         console.log('==========================shouldComponentUpdate START=====================');
@@ -74,7 +54,6 @@ class Sshare extends Component {
     }
 
     render() {
-        console.log('render');
         return (
             <MyApp
                 onNavigationStateChange={(prevState, currentState, action) => {
@@ -88,17 +67,11 @@ class Sshare extends Component {
     }
 }
 
-function select(store) {
-    return {
-        showCreateModal: store.createModalStore.showCreateModal,
-    }
-}
-
 const mapStateToProps = (state) => {
     return {
         ...state,
         showModal: state.showModal,
     }
-}
+};
 export default connect(mapStateToProps)(Sshare);
 // export default sshare;
