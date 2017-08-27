@@ -14,10 +14,12 @@ import {
     ScrollView,
     Alert,
     FlatList,
+    ListView,
     ActivityIndicator
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/Ionicons';
+//import Markdown from 'react-native-simple-markdown';
 
 const {height, width} = Dimensions.get('window');
 
@@ -42,16 +44,26 @@ export default class HomePage extends Component {
         ),
     };
 
+    componentWillMount() {
+        /*const {navigate} = this.props.navigation;
+        navigate('LoginRegPage');*/
+    }
+
     render() {
-        const { navigate } = this.props.navigation;
-        return(
-            <View><Text>首页</Text></View>
+        const {navigate} = this.props.navigation;
+        return (
+            <View style={styles.container}>
+                <Text>首页</Text>
+            </View>
         )
     }
 }
 
 const styles = StyleSheet.create({
-   icon: {
-
-   }
+    container: {
+        flex: 1,
+        padding: 10,
+        backgroundColor: '#fff'
+    },
+    icon: {}
 });

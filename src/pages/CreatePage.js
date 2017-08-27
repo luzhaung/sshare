@@ -18,7 +18,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import {NavigationActions} from 'react-navigation'
 
 import { connect } from 'react-redux';
-import { showModal } from '../actions/create';
+import *as createAction from '../actions/create';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -107,19 +107,18 @@ class CreatePage extends Component {
 
     static navigationOptions =({ navigation, screenProps })=> ({
         title: '发表',
-        //title: navigation.state.params.title,
-        tabBarLabel: '发表',
+        /*tabBarLabel: '发表',
         headerLeft: <View style={styles.cancel_create}>
             <Text onPress={this.cancel}>取消</Text>
         </View>,
-        headerRight: <Text style={styles.certain_create}/* onPress={navigation.state.params.navigatePress}*/>发布</Text>,
+        headerRight: <Text style={styles.certain_create}/!* onPress={navigation.state.params.navigatePress}*!/>发布</Text>,
         headerStyle: {
             backgroundColor: '#fff',
             height: 50
         },
         headerTitleStyle: {
             color: '#000'
-        },
+        },*/
         tabBarIcon: ({tintColor, focused}) => (
             focused
                 ?
@@ -150,13 +149,17 @@ class CreatePage extends Component {
         return true;
     }
     componentWillReceiveProps(nextProps) {
-        const {createModalStore, navigation} = nextProps;
+        const {createModalStore,loginModalStore, navigation} = nextProps;
         console.log(createModalStore);
+        console.log(loginModalStore);
         console.log(navigation);
-        if (createModalStore.showModal){
+        if (createModalStore.showCreateModal){
             console.log('==============是否显示CreateModal==============');
-            console.log(createModalStore.showModal);
+            console.log(createModalStore.showCreateModal);
             this.showModal();
+        }else if (loginModalStore.showLoginModal){
+            console.log('显示登录modal')
+            this.props.navigation.navigate('LoginPage');
         }
     }
 
@@ -174,7 +177,7 @@ class CreatePage extends Component {
         alert('点击headerRight');
         console.log(this.props.navigation);
     };*/
-    showModal() {
+    showModal = ()=> {
         this.setState({
             modalVisible: true,
         });
@@ -239,12 +242,6 @@ class CreatePage extends Component {
     render() {
         const {navigate} = this.props.navigation;
         console.log(navigate);
-        let modalBackgroundStyle = {
-            backgroundColor: this.state.transparent ? 'rgba(0, 0, 0, 0.5)' : '#f5fcff',
-        };
-        let innerContainerTransparentStyle = this.state.transparent
-            ? {backgroundColor: '#fff', padding: 20}
-            : null;
         return (
             <View>
                 <Modal
@@ -307,7 +304,8 @@ function select(store){
 const mapStateToProps = (state) => {
     return {
         ...state,
-        showModal: state.showModal,
+        showCreateModal: state.createModalStore.showCreateModal,
     }
-}
+};
+
 export default connect(mapStateToProps)(CreatePage);

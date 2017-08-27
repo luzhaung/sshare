@@ -5,7 +5,9 @@
  */
 import { combineReducers } from 'redux';
 import createReducer from './create';
+import loginReducer from './login';
 
 export default combineReducers({
     createModalStore: createReducer,
+    loginModalStore: loginReducer,
 });

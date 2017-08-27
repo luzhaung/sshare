@@ -7,9 +7,12 @@ import {
 import Home from './pages/HomePage';
 import Create from './pages/CreatePage';
 import Mine from './pages/MinePage';
+import LoginPage from './pages/LoginPage';
+import AboutPage from './pages/AboutPage';
 import {connect} from 'react-redux';
-import * as TYPES from './actions/types';
-import {showModal} from "./actions/create";
+import {showCreateModal} from "./actions/create";
+import {showLoginModal} from "./actions/login";
+import {isLogin} from './util/Secret';
 
 const myTabNavigator = TabNavigator({
     Home: {screen: Home},
@@ -28,21 +31,45 @@ const myTabNavigator = TabNavigator({
     animationEnabled: true,
 });
 const MyApp = StackNavigator({
-    myTabNavigator: {screen: myTabNavigator},
-    /*Detail: {screen: Detail},
-    Login: {screen: Login},*/
+    myTabNavigator: {
+        screen: myTabNavigator
+    },
+    LoginPage: {
+        screen: LoginPage
+    },
+    AboutPage: {
+        screen: AboutPage
+    }
 }, {
     headerMode: 'screen',
-    translucent: true,
     style: {
         backgroundColor: '#ffffff',
     },
-
 });
 
 class Sshare extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            isLogin: false,
+            token: '',
+            isLogout: false,
+            sent: false,
+            id: '',
+        }
+    }
+
+    componentWillMount() {
+        isLogin((result, token) => {
+            if (result) {
+                console.log('已登录');
+                console.log(result);
+                this.setState({
+                    isLogin: true,
+                    token: token,
+                });
+            }
+        });
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -53,13 +80,24 @@ class Sshare extends Component {
         return true;
     }
 
+    refresh = (isLogin, token) => {
+        this.setState({
+            isLogin: isLogin,
+            token: token,
+        });
+    };
+
     render() {
         return (
             <MyApp
                 onNavigationStateChange={(prevState, currentState, action) => {
                     console.log(action.routeName);
                     if (action.routeName === 'Create') {
-                        this.props.dispatch(showModal())
+                        if (this.state.isLogin) {
+                            this.props.dispatch(showCreateModal())
+                        } else {
+                            this.props.dispatch(showLoginModal())
+                        }
                     }
                 }}
             />
@@ -68,10 +106,11 @@ class Sshare extends Component {
 }
 
 const mapStateToProps = (state) => {
+    const {createModalStore, loginModalStore} = state;
     return {
-        ...state,
-        showModal: state.showModal,
+        createModalStore,
+        loginModalStore
     }
 };
 export default connect(mapStateToProps)(Sshare);
-// export default sshare;
+//export default Sshare;

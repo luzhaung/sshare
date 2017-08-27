@@ -5,3 +5,4 @@
  */
 
 export const SHOW_CREATE_MODAL 	= 'showCreateModal';
+export const SHOW_LOGIN_MODAL 	= 'showLoginModal';
