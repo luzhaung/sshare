@@ -3,7 +3,6 @@
  *@author luzhuang<luzhuang1994@gmail.com>
  *@time 下午12:08
  */
-/*
 import React, {Component} from 'react';
 import {
     StyleSheet,
@@ -106,4 +105,4 @@ const styles = StyleSheet.create({
 
     }
 });
-module.exports = LoginRegPage;*/
+module.exports = LoginRegPage;

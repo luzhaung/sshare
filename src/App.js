@@ -4,14 +4,17 @@ import {
     TabNavigator,
 } from 'react-navigation';
 
+import {Alert} from 'react-native';
+
 import Home from './pages/HomePage';
 import Create from './pages/CreatePage';
 import Mine from './pages/MinePage';
 import LoginPage from './pages/LoginPage';
 import AboutPage from './pages/AboutPage';
+import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {showCreateModal} from "./actions/create";
-import {showLoginModal} from "./actions/login";
+
+import *as Actions from './actions/index';
 import {isLogin} from './util/Secret';
 
 const myTabNavigator = TabNavigator({
@@ -91,12 +94,14 @@ class Sshare extends Component {
         return (
             <MyApp
                 onNavigationStateChange={(prevState, currentState, action) => {
-                    console.log(action.routeName);
+                    console.log(this.props);
                     if (action.routeName === 'Create') {
                         if (this.state.isLogin) {
-                            this.props.dispatch(showCreateModal())
+                            console.log('已登录showCreateModal')
+                            this.props.showCreateModal()
                         } else {
-                            this.props.dispatch(showLoginModal())
+                            console.log('未登录showCreateModal')
+                            this.props.showLoginModal()
                         }
                     }
                 }}
@@ -112,5 +117,9 @@ const mapStateToProps = (state) => {
         loginModalStore
     }
 };
-export default connect(mapStateToProps)(Sshare);
+
+const mapDispatchToProps = (dispatch)=>{
+    return bindActionCreators(Actions, dispatch)
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Sshare);
 //export default Sshare;

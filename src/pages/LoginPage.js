@@ -19,8 +19,10 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {PRIMARY_COLOR} from '../def/Color'
 import {LoginlUrl} from '../def/Api';
 import {connect} from 'react-redux';
+import {bindActionCreators} from "redux";
 import *as loginAction from '../actions/login';
 import {NavigationActions} from 'react-navigation'
+import {isLogin} from '../util/Secret';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -63,7 +65,7 @@ const styles = StyleSheet.create({
     },
 });
 
-export default class LoginPage extends Component {
+class LoginPage extends Component {
 
     constructor(props) {
         super(props);
@@ -75,6 +77,7 @@ export default class LoginPage extends Component {
             transparent: false,
             inLogin: false,
             modalVisible: true,
+            isLogin: false
         };
     };
 
@@ -103,17 +106,42 @@ export default class LoginPage extends Component {
         return true;
     };
 
-    componentWillMount() {
-
+    /*componentWillReceiveProps(nextProps, nextState) {
+        console.log(nextProps);
     }
 
-    async login() {
+    shouldComponentUpdate(nextProps, nextState) {
+        console.log(nextProps);
+        console.log(nextState);
+        return true;
+    }
+
+    componentWillMount() {
+        isLogin((result, token) => {
+            if (result) {
+                console.log('已登录');
+                console.log(result);
+                this.setState({
+                    modalVisible: false,
+                });
+                this.props.navigation.navigate('AboutPage');
+            }else{
+                console.log('未登录');
+            }
+        });
+    }
+
+    componentDidMount() {
+        this.setState({modalVisible: true})
+    }*/
+
+    async _login() {
         if (!this.checkLogin()) return false;
         this.setState({inLogin: true});
         let username = this.state.email;
         let password = this.state.password;
-        console.log(username);
-        console.log(password);
+        // console.log(username);
+        // console.log(password);
         let response = await fetch(`${LoginlUrl}`, {
             method: 'POST',
             headers: {
@@ -123,21 +151,20 @@ export default class LoginPage extends Component {
         });
         let jsonData = await response.json();
         if (jsonData.status === 1) {
-            AsyncStorage.setItem('token', jsonData.data);
-            AsyncStorage.setItem('user_info', JSON.stringify(jsonData.user_info));
-            /*this.setState({
-                modalVisible: false,
-            });
-            const {navigate} = this.props.navigation;
+            await AsyncStorage.setItem('token', jsonData.data);
+            await AsyncStorage.setItem('user_info', JSON.stringify(jsonData.user_info));
+            this.cancel();
+            /*const {navigate} = this.props.navigation;
+            this.setState({modalVisible:false});
             console.log(navigate);
             navigate('Mine', {userInfo: jsonData.user_info});*/
-            Alert.alert('成功', jsonData.info);
-            this.setState({inLogin: false});
-            this.cancel();
+            //Alert.alert('成功', jsonData.info);
+            //this.setState({inLogin: false});
+            //
         } else {
             Alert.alert('失败', jsonData.info);
+            this.setState({inLogin: false});
         }
-        this.setState({inLogin: false});
     };
 
     render() {
@@ -202,10 +229,10 @@ export default class LoginPage extends Component {
                                 <View>
                                     {
                                         this.state.inLogin ?
-                                            <View style={[styles.loginBtn, {backgroundColor: '#00ccc3'}]}>
+                                            <View style={[styles.loginBtn, {backgroundColor: '#0764FF'}]}>
                                                 <Text style={{color: 'white', fontSize: 16}}>登录中</Text>
                                             </View> :
-                                            <TouchableOpacity onPress={this.login.bind(this)} style={styles.loginBtn}>
+                                            <TouchableOpacity onPress={this._login.bind(this)} style={styles.loginBtn}>
                                                 <Text style={{color: 'white', fontSize: 16}}>登录</Text>
                                             </TouchableOpacity>
                                     }
@@ -220,14 +247,17 @@ export default class LoginPage extends Component {
 }
 
 
-/*const mapStateToProps = (state) => {
+const mapStateToProps = (state) => {
     return {
-        ...state,
-        showLoginModal: state.loginModalStore.showLoginModal,
+        //...state,
+        loginModalStore: state.loginModalStore,
     }
 };
 
-export default connect(mapStateToProps)(LoginPage);*/
+const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators(loginAction, dispatch)
+};
+export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);
 
 /*
 export default connect(

@@ -146,6 +146,8 @@ class CreatePage extends Component {
     };
     shouldComponentUpdate(nextProps, nextState){
         console.log('=====================CreatePage shouldComponentUpdate start=================');
+        console.log(nextProps);
+        console.log(nextState);
         return true;
     }
     componentWillReceiveProps(nextProps) {
@@ -158,7 +160,7 @@ class CreatePage extends Component {
             console.log(createModalStore.showCreateModal);
             this.showModal();
         }else if (loginModalStore.showLoginModal){
-            console.log('显示登录modal')
+            console.log('显示登录modal');
             this.props.navigation.navigate('LoginPage');
         }
     }
@@ -241,7 +243,7 @@ class CreatePage extends Component {
 
     render() {
         const {navigate} = this.props.navigation;
-        console.log(navigate);
+        //console.log(navigate);
         return (
             <View>
                 <Modal
@@ -302,9 +304,11 @@ function select(store){
 }
 
 const mapStateToProps = (state) => {
+    //console.log(state)
     return {
-        ...state,
-        showCreateModal: state.createModalStore.showCreateModal,
+        //...state,
+        loginModalStore: state.loginModalStore,
+        createModalStore: state.createModalStore,
     }
 };
 
