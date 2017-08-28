@@ -4,8 +4,11 @@
  *@time 下午5:10
  */
 import * as TYPES from '../actions/types';
+import {isLogin} from '../util/Secret';
 const initialState = {
-    showLoginModal: false,
+    showLoginModal: !isLogin,
+    isLogin: isLogin,
+    isLogout: !isLogin,
 };
 
 export default function loginReducer(state = initialState, action) {
@@ -13,6 +16,16 @@ export default function loginReducer(state = initialState, action) {
         case TYPES.SHOW_LOGIN_MODAL:
             return {
                 showLoginModal: true
+            };
+        case TYPES.IS_LOGIN:
+            return {
+                showLoginModal: false,
+                isLogin: true
+            };
+        case TYPES.IS_LOGOUT:
+            return {
+                showLoginModal: true,
+                isLogout: true,
             };
         default:
             return state;

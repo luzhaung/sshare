@@ -21,7 +21,7 @@ import {LoginlUrl} from '../def/Api';
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 import *as loginAction from '../actions/login';
-import {NavigationActions} from 'react-navigation'
+import {NavigationActions} from 'react-navigation';
 import {isLogin} from '../util/Secret';
 
 const windowWidth = Dimensions.get('window').width;
@@ -151,16 +151,13 @@ class LoginPage extends Component {
         });
         let jsonData = await response.json();
         if (jsonData.status === 1) {
+            this.props.markLogin();
             await AsyncStorage.setItem('token', jsonData.data);
             await AsyncStorage.setItem('user_info', JSON.stringify(jsonData.user_info));
-            this.cancel();
-            /*const {navigate} = this.props.navigation;
-            this.setState({modalVisible:false});
-            console.log(navigate);
-            navigate('Mine', {userInfo: jsonData.user_info});*/
-            //Alert.alert('成功', jsonData.info);
-            //this.setState({inLogin: false});
-            //
+            this.setState({
+                modalVisible: false,
+            });
+            this.props.navigation.navigate('Mine')
         } else {
             Alert.alert('失败', jsonData.info);
             this.setState({inLogin: false});
@@ -248,6 +245,7 @@ class LoginPage extends Component {
 
 
 const mapStateToProps = (state) => {
+    console.log(state);
     return {
         //...state,
         loginModalStore: state.loginModalStore,

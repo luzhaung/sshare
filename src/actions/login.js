@@ -10,3 +10,15 @@ export function showLoginModal() {
         dispatch({'type': TYPES.SHOW_LOGIN_MODAL});
     }
 }
+
+export function markLogin() {
+    return (dispatch) => {
+        dispatch({'type': TYPES.IS_LOGIN});
+    }
+}
+
+export function markLogout() {
+    return (dispatch) => {
+        dispatch({'type': TYPES.IS_LOGOUT});
+    }
+}

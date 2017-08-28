@@ -53,6 +53,7 @@ const MyApp = StackNavigator({
 class Sshare extends Component {
     constructor(props) {
         super(props);
+        console.log(props);
         this.state = {
             isLogin: false,
             token: '',
@@ -63,6 +64,7 @@ class Sshare extends Component {
     }
 
     componentWillMount() {
+        console.log(this.props)
         isLogin((result, token) => {
             if (result) {
                 console.log('已登录');
@@ -74,6 +76,32 @@ class Sshare extends Component {
             }
         });
     }
+
+    componentWillReceiveProps(nextProps) {
+        const {createModalStore,loginModalStore, navigation} = nextProps;
+        console.log(createModalStore);
+        console.log(loginModalStore);
+        console.log(navigation);
+        if (loginModalStore.isLogin){
+            this.setState({isLogin: true})
+        }else if (loginModalStore.isLogout){
+            this.setState({isLogin: false,showLoginModal:true,showCreateModal: false})
+        }
+
+    }
+
+    /*componentDidMount() {
+        isLogin((result, token) => {
+            if (result) {
+                console.log('已登录');
+                console.log(result);
+                this.setState({
+                    isLogin: true,
+                    token: token,
+                });
+            }
+        });
+    }*/
 
     shouldComponentUpdate(nextProps, nextState) {
         console.log('==========================shouldComponentUpdate START=====================');
@@ -97,10 +125,10 @@ class Sshare extends Component {
                     console.log(this.props);
                     if (action.routeName === 'Create') {
                         if (this.state.isLogin) {
-                            console.log('已登录showCreateModal')
+                            console.log('已登录showCreateModal');
                             this.props.showCreateModal()
                         } else {
-                            console.log('未登录showCreateModal')
+                            console.log('未登录showCreateModal');
                             this.props.showLoginModal()
                         }
                     }
@@ -111,6 +139,7 @@ class Sshare extends Component {
 }
 
 const mapStateToProps = (state) => {
+    console.log(state);
     const {createModalStore, loginModalStore} = state;
     return {
         createModalStore,
@@ -118,7 +147,7 @@ const mapStateToProps = (state) => {
     }
 };
 
-const mapDispatchToProps = (dispatch)=>{
+const mapDispatchToProps = (dispatch) => {
     return bindActionCreators(Actions, dispatch)
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Sshare);

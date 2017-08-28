@@ -155,10 +155,12 @@ class CreatePage extends Component {
         console.log(createModalStore);
         console.log(loginModalStore);
         console.log(navigation);
-        if (createModalStore.showCreateModal){
+        if (createModalStore.showCreateModal && loginModalStore.isLogin){
             console.log('==============是否显示CreateModal==============');
             console.log(createModalStore.showCreateModal);
             this.showModal();
+        }else if(loginModalStore.isLogout){
+
         }else if (loginModalStore.showLoginModal){
             console.log('显示登录modal');
             this.props.navigation.navigate('LoginPage');
@@ -183,7 +185,7 @@ class CreatePage extends Component {
         this.setState({
             modalVisible: true,
         });
-    }
+    };
 
     cancel() {
         this.setState({

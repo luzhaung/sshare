@@ -18,14 +18,185 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {PRIMARY_COLOR} from '../def/Color';
 import {LogoutlUrl, getAccessToken} from '../def/Api';
 import ActionSheet from 'react-native-actionsheet'
+import {connect} from 'react-redux';
+import {bindActionCreators} from "redux";
+import *as loginAction from '../actions/login';
+import {NavigationActions} from 'react-navigation'
 
 const CANCEL_INDEX = 0;
 const DESTRUCTIVE_INDEX = 1;
 const options = ['取消', '退出'];
-const title = '确认退出?';
+const title = '确认退出吗';
 
 const {height, width} = Dimensions.get('window');
-export default class MinePage extends Component {
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#ebebeb',
+        height: height,
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+    },
+    icon: {
+        /*height: 25,*/
+    },
+    button: {
+        backgroundColor: PRIMARY_COLOR,
+        width: width - 20,
+        height: 42,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    loginNoticle: {
+        marginTop: 10,
+        paddingHorizontal: 10,
+        width: width,
+        flexDirection: 'row',
+        backgroundColor: '#fff',
+        height: 50,
+    },
+    toLogin: {
+        justifyContent: 'center',
+        marginLeft: 5,
+    },
+    toLoginText: {
+        color: '#666'
+    },
+    myRelation: {
+        marginTop: 10,
+        flexDirection: 'row',
+        backgroundColor: '#fff',
+        height: 30,
+    },
+    myFollow: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRightWidth: 1,
+        borderRightColor: '#dfdfdf'
+    },
+    myFans: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    FollowText: {
+        fontSize: 14,
+    },
+    myNotify: {
+        flexDirection: 'row',
+        height: 40,
+        backgroundColor: '#fff',
+        marginTop: 10,
+    },
+    points: {
+        flexDirection: 'row',
+        height: 40,
+        backgroundColor: '#fff',
+        marginTop: 2,
+    },
+    create: {
+        flexDirection: 'row',
+        height: 40,
+        backgroundColor: '#fff',
+        marginTop: 2,
+    },
+    myNotifyIco: {
+        marginTop: 4,
+        marginLeft: 10,
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+    },
+    myNotifyText: {
+        marginLeft: 10,
+        justifyContent: 'center',
+    },
+    myNotifyRight: {
+        justifyContent: 'center',
+        right: 10,
+        position: 'absolute',
+        marginTop: 10,
+        flexDirection: 'row',
+    },
+    mynotifys: {
+        color: '#999',
+        marginRight: 5,
+    },
+    tags: {
+        flexDirection: 'row',
+        height: 40,
+        backgroundColor: '#fff',
+        marginTop: 10,
+    },
+    setting: {
+        flexDirection: 'row',
+        height: 40,
+        backgroundColor: '#fff',
+        marginTop: 10,
+    },
+    reback: {
+        flexDirection: 'row',
+        height: 40,
+        backgroundColor: '#fff',
+        marginTop: 2,
+    },
+    articles: {
+        flexDirection: 'row',
+        height: 40,
+        backgroundColor: '#fff',
+        marginTop: 2,
+    },
+    comments: {
+        flexDirection: 'row',
+        height: 40,
+        backgroundColor: '#fff',
+        marginTop: 2,
+    },
+    avatar: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        alignItems: 'center',
+        alignSelf: 'center',
+    },
+    sign: {
+        position: 'absolute',
+        right: 5,
+        alignItems: 'center',
+        alignSelf: 'center',
+        justifyContent: 'center',
+    },
+    signButton: {
+        width: 50,
+        height: 25,
+        backgroundColor: '#31b0d5',
+        borderTopWidth: 1,
+        borderRightWidth: 1,
+        borderBottomWidth: 1,
+        borderLeftWidth: 1,
+        borderTopColor: '#269abc',
+        borderRightColor: '#269abc',
+        borderBottomColor: '#269abc',
+        borderLeftColor: '#269abc',
+        borderRadius: 3,
+        justifyContent: 'center',
+        alignSelf: 'center',
+        alignItems: 'center',
+    },
+    signText: {
+        fontSize: 12,
+        color: '#fff',
+    },
+    logout: {
+        height: 40,
+        backgroundColor: '#fff',
+        marginTop: 10,
+        justifyContent: 'center',
+        alignItems: 'center'
+    }
+});
+class MinePage extends Component {
     static navigationOptions = {
         title: '我的',
         tabBarLabel: '我的',
@@ -73,13 +244,14 @@ export default class MinePage extends Component {
         if (access_token) {
             const comments = await fetch(`${LogoutlUrl}?sess_id=${access_token}`);
             let jsonData = await comments.json();
-            console.log(jsonData);
             if (jsonData.status === 1) {
+                this.props.markLogout();
                 await AsyncStorage.setItem('token', '');
                 this.setState({
                     isLogin: false,
                     userInfo: false,
-                })
+                });
+                this.props.navigation.navigate('Mine')
             }
         }
         return true
@@ -300,170 +472,15 @@ export default class MinePage extends Component {
         )
     }
 }
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#ebebeb',
-        height: height,
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-    },
-    icon: {
-        /*height: 25,*/
-    },
-    button: {
-        backgroundColor: PRIMARY_COLOR,
-        width: width - 20,
-        height: 42,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    loginNoticle: {
-        marginTop: 10,
-        paddingHorizontal: 10,
-        width: width,
-        flexDirection: 'row',
-        backgroundColor: '#fff',
-        height: 50,
-    },
-    toLogin: {
-        justifyContent: 'center',
-        marginLeft: 5,
-    },
-    toLoginText: {
-        color: '#666'
-    },
-    myRelation: {
-        marginTop: 10,
-        flexDirection: 'row',
-        backgroundColor: '#fff',
-        height: 30,
-    },
-    myFollow: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRightWidth: 1,
-        borderRightColor: '#dfdfdf'
-    },
-    myFans: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    FollowText: {
-        fontSize: 14,
-    },
-    myNotify: {
-        flexDirection: 'row',
-        height: 40,
-        backgroundColor: '#fff',
-        marginTop: 10,
-    },
-    points: {
-        flexDirection: 'row',
-        height: 40,
-        backgroundColor: '#fff',
-        marginTop: 2,
-    },
-    create: {
-        flexDirection: 'row',
-        height: 40,
-        backgroundColor: '#fff',
-        marginTop: 2,
-    },
-    myNotifyIco: {
-        marginTop: 4,
-        marginLeft: 10,
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-    },
-    myNotifyText: {
-        marginLeft: 10,
-        justifyContent: 'center',
-    },
-    myNotifyRight: {
-        justifyContent: 'center',
-        right: 10,
-        position: 'absolute',
-        marginTop: 10,
-        flexDirection: 'row',
-    },
-    mynotifys: {
-        color: '#999',
-        marginRight: 5,
-    },
-    tags: {
-        flexDirection: 'row',
-        height: 40,
-        backgroundColor: '#fff',
-        marginTop: 10,
-    },
-    setting: {
-        flexDirection: 'row',
-        height: 40,
-        backgroundColor: '#fff',
-        marginTop: 10,
-    },
-    reback: {
-        flexDirection: 'row',
-        height: 40,
-        backgroundColor: '#fff',
-        marginTop: 2,
-    },
-    articles: {
-        flexDirection: 'row',
-        height: 40,
-        backgroundColor: '#fff',
-        marginTop: 2,
-    },
-    comments: {
-        flexDirection: 'row',
-        height: 40,
-        backgroundColor: '#fff',
-        marginTop: 2,
-    },
-    avatar: {
-        width: 40,
-        height: 40,
-        borderRadius: 20,
-        alignItems: 'center',
-        alignSelf: 'center',
-    },
-    sign: {
-        position: 'absolute',
-        right: 5,
-        alignItems: 'center',
-        alignSelf: 'center',
-        justifyContent: 'center',
-    },
-    signButton: {
-        width: 50,
-        height: 25,
-        backgroundColor: '#31b0d5',
-        borderTopWidth: 1,
-        borderRightWidth: 1,
-        borderBottomWidth: 1,
-        borderLeftWidth: 1,
-        borderTopColor: '#269abc',
-        borderRightColor: '#269abc',
-        borderBottomColor: '#269abc',
-        borderLeftColor: '#269abc',
-        borderRadius: 3,
-        justifyContent: 'center',
-        alignSelf: 'center',
-        alignItems: 'center',
-    },
-    signText: {
-        fontSize: 12,
-        color: '#fff',
-    },
-    logout: {
-        height: 40,
-        backgroundColor: '#fff',
-        marginTop: 10,
-        justifyContent: 'center',
-        alignItems: 'center'
+
+const mapStateToProps = (state) => {
+    return {
+        //...state,
+        loginModalStore: state.loginModalStore,
     }
-});
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators(loginAction, dispatch)
+};
+export default connect(mapStateToProps, mapDispatchToProps)(MinePage);
