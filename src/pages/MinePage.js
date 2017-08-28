@@ -16,7 +16,13 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {PRIMARY_COLOR} from '../def/Color';
-import {getAccessToken} from '../def/Api';
+import {LogoutlUrl, getAccessToken} from '../def/Api';
+import ActionSheet from 'react-native-actionsheet'
+
+const CANCEL_INDEX = 0;
+const DESTRUCTIVE_INDEX = 1;
+const options = ['取消', '退出'];
+const title = '确认退出?';
 
 const {height, width} = Dimensions.get('window');
 export default class MinePage extends Component {
@@ -39,7 +45,7 @@ export default class MinePage extends Component {
         ),
     };
 
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             loading: false,
@@ -48,26 +54,57 @@ export default class MinePage extends Component {
         };
     }
 
-    onPress(){
+    showActionSheet = () => {
+        this.ActionSheet.show();
+    };
+    handlePress = (i) => {
+        switch (i) {
+            case 1:
+                this.logout();
+                break;
+            default:
+                break;
+        }
+    };
+
+    async logout(){
+        // 判断是否登录[getAccessToken]
+        const access_token = await AsyncStorage.getItem('token');
+        if (access_token) {
+            const comments = await fetch(`${LogoutlUrl}?sess_id=${access_token}`);
+            let jsonData = await comments.json();
+            console.log(jsonData);
+            if (jsonData.status === 1) {
+                await AsyncStorage.setItem('token', '');
+                this.setState({
+                    isLogin: false,
+                    userInfo: false,
+                })
+            }
+        }
+        return true
+    };
+
+    onPress = () => {
         console.log('loading');
-    }
+    };
 
     // 判断是否登录
-    async componentWillMount(){
+    async componentWillMount() {
         // 接收登录界面传递来的值[会员信息]
-        const { params,goBack } = this.props.navigation.state;
-        if (params){
+        const {params, goBack} = this.props.navigation.state;
+        if (params) {
             this.setState({
                 isLogin: true,
                 userInfo: params.userInfo,
             })
-        }else{
+        } else {
             // 判断是否登录[getAccessToken]
             const access_token = await AsyncStorage.getItem('token');
-            if (access_token){
+            if (access_token) {
                 const comments = await fetch(`${getAccessToken}?sess_id=${access_token}`);
                 let jsonData = await comments.json();
-                if (jsonData.status === 1){
+                if (jsonData.status === 1) {
                     this.setState({
                         isLogin: true,
                         userInfo: jsonData.data,
@@ -81,14 +118,14 @@ export default class MinePage extends Component {
         const {navigate} = this.props.navigation;
         const {loading, isLogin, userInfo} = this.state;
         let buttonBorderRadius = 0;
-        if (Platform.OS === 'ios'){
+        if (Platform.OS === 'ios') {
             buttonBorderRadius = 5;
         }
         return (
             <View style={styles.container}>
                 {
                     loading ?
-                        <View style={[styles.button,{borderRadius: buttonBorderRadius}]}>
+                        <View style={[styles.button, {borderRadius: buttonBorderRadius}]}>
                             <ActivityIndicator/>
                         </View>
                         :
@@ -100,7 +137,7 @@ export default class MinePage extends Component {
                                         style={styles.loginNoticle}
                                     >
                                         <Image
-                                            source={{uri:'https://www.shiqidu.com'+userInfo.avatar_src_50}}
+                                            source={{uri: 'https://www.shiqidu.com' + userInfo.avatar_src_50}}
                                             style={styles.avatar}
                                         />
                                         <View style={styles.toLogin}>
@@ -118,7 +155,7 @@ export default class MinePage extends Component {
                                     :
                                     <TouchableOpacity
                                         style={styles.loginNoticle}
-                                        onPress={() => navigate('Login', {})}
+                                        onPress={() => navigate('LoginPage')}
                                     >
                                         <Icon name="md-contact" size={50} color={'#999'}/>
                                         <View style={styles.toLogin}>
@@ -243,15 +280,22 @@ export default class MinePage extends Component {
                                 </View>
                             </TouchableOpacity>
                             {
-                                isLogin && <TouchableOpacity style={styles.logout}>
+                                isLogin && <TouchableOpacity style={styles.logout} onPress={this.showActionSheet}>
                                     <View>
-                                        <Text style={{color:'#f33'}}>退出登录</Text>
+                                        <Text style={{color: '#f33'}}>退出登录</Text>
                                     </View>
                                 </TouchableOpacity>
                             }
-
                         </ScrollView>
                 }
+                <ActionSheet
+                    ref={o => this.ActionSheet = o}
+                    title={title}
+                    options={options}
+                    cancelButtonIndex={CANCEL_INDEX}
+                    destructiveButtonIndex={DESTRUCTIVE_INDEX}
+                    onPress={this.handlePress}
+                />
             </View>
         )
     }
