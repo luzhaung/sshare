@@ -13,6 +13,7 @@ import {
     View,
     Dimensions
 } from 'react-native';
+import {PRIMARY_COLOR} from "../def/Color";
 
 const windowWidth = Dimensions.get('window').width;
 const margin = 20;
@@ -45,7 +46,7 @@ const styles = StyleSheet.create({
     feedUserName: {
         marginTop: 3,
         fontSize: 16,
-        color: '#00B5AD',
+        color: PRIMARY_COLOR,
         lineHeight: 16,
     },
     feedTime: {
@@ -82,6 +83,7 @@ const styles = StyleSheet.create({
         height: (windowWidth - margin * 2 - imgInterval * 2) / 3,
         marginBottom: imgInterval,
         marginRight: imgInterval,
+        backgroundColor: '#e7edf3',
     },
     feedActions: {
         //borderWidth: 1,
@@ -124,22 +126,24 @@ const renderFeedImages = (content) => {
     if(content === null) return [];
     let images = content.split(",");
     let imagesView = [];
-    for(let i=0; i<images.length-1; i++) {
-        imagesView.push(<Image source={{uri: images[i]}} style={styles.feedContentImage}/>);
+    for(let i=0; i<images.length; i++) {
+        console.log(images[i]);
+        imagesView.push(<Image source={{uri: images[i]}} style={styles.feedContentImage} key={i}/>);
     }
+
     return imagesView;
 };
 
 const renderFeedContent = (feed) => {
     if (feed.excerpt === null || feed.excerpt.length === 0) {
         return (
-            <View style={styles.feedContentImages}>{renderFeedImages(this.props.feed.images)}</View>
+            <View style={styles.feedContentImages}>{renderFeedImages(feed.images)}</View>
         );
     }
     return (
         <View>
-            <Text style={styles.feedContentText}>{this.props.feed.excerpt}</Text>
-            <View style={styles.feedContentImages}>{renderFeedImages(this.props.feed.images)}</View>
+            <Text style={styles.feedContentText}>{feed.excerpt}</Text>
+            <View style={styles.feedContentImages}>{renderFeedImages(feed.images)}</View>
         </View>
     );
 };
@@ -153,27 +157,28 @@ const renderCommentList = () => {
 
 const FeedCell = (props) =>{
     console.log(props);
+    const {feed,pressAvatar,selectFeed} = props;
     return (
         <View>
             <TouchableOpacity
-                onPress={this.props.onSelect}>
+                onPress={selectFeed}>
                 <View style={styles.container}>
                     <View style={styles.feedHeader}>
                         <View>
-                            <TouchableOpacity onPress={this.props.pressAvatar}>
+                            <TouchableOpacity onPress={pressAvatar}>
                                 <Image
-                                    source={{uri: this.props.feed.author_avatar}}
+                                    source={{uri: feed.author_avatar}}
                                     style={styles.avatar}/>
                             </TouchableOpacity>
                         </View>
                         <View style={styles.feedUserInfo}>
-                            <Text style={styles.feedUserName}>{this.props.feed.username}</Text>
-                            <Text style={styles.feedTime}>{this.props.feed.timeFormat}</Text>
+                            <Text style={styles.feedUserName}>{feed.username}</Text>
+                            <Text style={styles.feedTime}>{feed.timeFormat}</Text>
                             {/* <Text style={styles.feedTime}>{this.props.feed.id+' '+this.props.page}</Text> */}
                         </View>
                     </View>
                     <View style={styles.feedContent}>
-                        {renderFeedContent(this.props.feed)}
+                        {renderFeedContent(feed)}
                     </View>
                     {/*{this.renderCommentList()}*/}
                 </View>

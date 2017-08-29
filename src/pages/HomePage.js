@@ -18,7 +18,7 @@ import {
     ActivityIndicator
 } from 'react-native';
 
-import {FeedList} from '../component/FeedList'
+import FeedList from '../component/FeedList'
 import Icon from 'react-native-vector-icons/Ionicons';
 //import Markdown from 'react-native-simple-markdown';
 const {height, width} = Dimensions.get('window');

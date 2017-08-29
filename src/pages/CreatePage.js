@@ -20,7 +20,7 @@ import {connect} from 'react-redux';
 import *as createAction from '../actions/create';
 import {Regulars} from "../def/Regular";
 import KeyboardSpacer from 'react-native-keyboard-spacer';
-import {uploadImage,sendPost} from '../def/Api';
+import {uploadImage, sendPost} from '../def/Api';
 import {PRIMARY_COLOR} from "../def/Color";
 import {getToken} from "../util/Secret";
 
@@ -129,8 +129,8 @@ const styles = StyleSheet.create({
         width: 50,
     },
     sendButton: {
-      borderRadius: 4,
-      backgroundColor: PRIMARY_COLOR,
+        borderRadius: 4,
+        backgroundColor: PRIMARY_COLOR,
 
     },
     wrap: {
@@ -177,6 +177,7 @@ class CreatePage extends Component {
             animated: true,
             modalVisible: false,
             transparent: false,
+            goBack: false,
         };
     };
 
@@ -225,19 +226,22 @@ class CreatePage extends Component {
         });
     };
 
-    cancel() {
-        this.setState({
+    cancel = () => {
+        //this.props.navigation.goBack();
+        /*this.setState({
             modalVisible: false,
-        });
-        const backAction = NavigationActions.back();
-        this.props.navigation.dispatch(backAction);
-        /*this.props.navigation.dispatch(NavigationActions.reset({
+            goBack: true
+        });*/
+        //this.props.navigation.dispatch(NavigationActions.back());
+        //const backAction = NavigationActions.back();
+        //this.props.navigation.dispatch(backAction);
+        this.props.navigation.dispatch(NavigationActions.reset({
             index: 0,
             actions: [
                 NavigationActions.navigate({routeName: 'myTabNavigator'})
             ]
-        }));*/
-    }
+        }));
+    };
 
     pickMultiple() {
         ImagePicker.openPicker({
@@ -333,36 +337,36 @@ class CreatePage extends Component {
             },
             body: formData,
         }).then((response) => response.json()).then((responseData) => {
-                console.log('responseData', responseData);
-                if (responseData.status === 1){
-                    for (let img of responseData.data){
-                        this.state.respImages.push(img);
-                    }
-                    this.toSendPost();
-                }else{
-                    Alert.alert(responseData.info);
+            console.log('responseData', responseData);
+            if (responseData.status === 1) {
+                for (let img of responseData.data) {
+                    this.state.respImages.push(img);
                 }
-            }).catch((error) => {
-                console.error('error', error)
-            });
+                this.toSendPost();
+            } else {
+                Alert.alert(responseData.info);
+            }
+        }).catch((error) => {
+            console.error('error', error)
+        });
     };
 
     toSendPost = () => {
         const {respImages, text, tags} = this.state;
-        getToken((token)=>{
+        getToken((token) => {
             let options = {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
-                    'token':token,
+                    'token': token,
                 },
                 // body: encodeURI(JSON.stringify({content: text, photos: respImages, tags: tags}), 'utf-8')
-                body: 'content='+text+'&photos='+respImages.toString()+'&tags='+tags.toString()
+                body: 'content=' + text + '&photos=' + respImages.toString() + '&tags=' + tags.toString()
             };
             fetch(`${sendPost}`, options).then((response) => response.json())
                 .then((responseData) => {
                     this.setState({uploading: false});
-                    if(responseData.status === 1) {
+                    if (responseData.status === 1) {
                         console.log(responseData);
                         this.props.navigation.dispatch(NavigationActions.reset({
                             index: 0,
@@ -371,7 +375,7 @@ class CreatePage extends Component {
                             ]
                         }));
                         // callback(true, responseData.post.id);
-                    }else{
+                    } else {
                         Alert.alert(responseData.info);
                     }
                     console.log(responseData);
@@ -381,7 +385,7 @@ class CreatePage extends Component {
 
     send = () => {
         const {images, text, tags} = this.state;
-        if (images.length > 0){
+        if (images.length > 0) {
             this.uploadImg();
             console.log(images);
             console.log(text);
@@ -405,7 +409,7 @@ class CreatePage extends Component {
                     }}>
                     <View style={styles.nav}>
                         <View style={styles.cancel_create}>
-                            <Text onPress={this.cancel.bind(this)}>取消</Text>
+                            <Text onPress={this.cancel}>取消</Text>
                         </View>
                         <View style={styles.title}><Text
                             style={{textAlign: 'center', fontWeight: 'bold'}}>发状态</Text></View>

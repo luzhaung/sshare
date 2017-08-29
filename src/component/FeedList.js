@@ -16,13 +16,16 @@ import {
     Alert,
     ActivityIndicator
 } from 'react-native';
-import {FeedCell} from './FeedCell';
+import FeedCell from './FeedCell';
 import {PostList} from '../def/Api';
 
 const windowWidth = Dimensions.get('window').width;
 
 
 export default class FeedList extends Component {
+    state = {selected: (new Map(): Map<string, boolean>)};
+    page = 1;
+    rows = 20;
     constructor(props) {
         super(props);
         this.state = {
@@ -34,8 +37,6 @@ export default class FeedList extends Component {
             refreshing: false,
             isLoadingMore: false,
         };
-        page = 1;
-        rows = 20;
     }
 
     async componentDidMount() {
@@ -69,6 +70,7 @@ export default class FeedList extends Component {
             .then((response) => response.text())
             .then((responseText) => {
                 const json = JSON.parse(responseText);
+                console.log(json);
                 if (json.status === -1) {
                     Alert.alert('', json.info);
                     this.setState({
@@ -80,6 +82,7 @@ export default class FeedList extends Component {
                     refreshing: false,
                 });
                 this.refreshing = false;
+                console.log(json.data);
                 return json.data;
             })
             .catch((error) => {
@@ -89,9 +92,17 @@ export default class FeedList extends Component {
 
     freshData = async () => {
         const json = await this.fetchData();
+        console.log(json);
         this.setState({
             feeds: json,
         })
+    };
+
+    fetchEmpty = ()=>{
+        console.log('fetchEmpty')
+        setTimeout(function () {
+            return {loading:true}
+        }, 100)
     };
 
     fetchMore = async () => {
@@ -117,16 +128,16 @@ export default class FeedList extends Component {
     render() {
         return (
             <FlatList
-                data={this.props.data}
+                data={this.state.feeds}
                 extraData={this.state}
                 keyExtractor={this._keyExtractor}
                 renderItem={this._renderItem}
                 onRefresh={this.freshData}
                 onEndReached={this.fetchMore}
                 onEndReachedThreshold={0}
-                refreshing={refreshing}
+                refreshing={this.state.refreshing}
                 ListFooterComponent={() => {
-                    return refreshing && <ActivityIndicator size="large"/>
+                    return this.state.refreshing && <ActivityIndicator size="large"/>
                 }}
             />
         )

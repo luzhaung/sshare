@@ -123,6 +123,7 @@ class Sshare extends Component {
             <MyApp
                 onNavigationStateChange={(prevState, currentState, action) => {
                     console.log(this.props);
+                    console.log(action);
                     if (action.routeName === 'Create') {
                         if (this.state.isLogin) {
                             console.log('已登录showCreateModal');
