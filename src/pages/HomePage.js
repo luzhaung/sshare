@@ -26,7 +26,8 @@ const {height, width} = Dimensions.get('window');
 export default class HomePage extends Component {
     static navigationOptions = {
         title: '首页',
-        tabBarLabel: '首页',
+        headerLeft: null,
+        headerBackTitle: null,
         headerRight: <Icon name="ios-search" size={22} style={{marginRight: 10}}/>,
         headerStyle: {
             backgroundColor: '#fff',
@@ -38,9 +39,9 @@ export default class HomePage extends Component {
         tabBarIcon: ({tintColor, focused}) => (
             focused
                 ?
-                <Icon name="ios-aperture" size={22} color={tintColor} style={styles.icon}/>
+                <Icon name="ios-home" size={22} color={tintColor} style={styles.icon}/>
                 :
-                <Icon name="ios-aperture-outline" size={22} color={tintColor} style={styles.icon}/>
+                <Icon name="ios-home-outline" size={22} color={tintColor} style={styles.icon}/>
         ),
     };
 

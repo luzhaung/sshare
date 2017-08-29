@@ -50,6 +50,7 @@ const styles = StyleSheet.create({
     regText: {
         color: PRIMARY_COLOR,
         lineHeight: 25,
+        fontWeight: 'bold',
     },
     inputs: {
         marginTop: 30,
@@ -178,7 +179,7 @@ class LoginPage extends Component {
                         <View style={styles.header}>
                             <View style={styles.cancelBtn}>
                                 <TouchableOpacity onPress={this.cancel}>
-                                    <Icon name="ios-arrow-back" size={25} color={'#007aff'} style={styles.icon}/>
+                                    <Icon name="md-arrow-round-back" size={25} color={'#007aff'} style={styles.icon}/>
                                 </TouchableOpacity>
                             </View>
                             <View style={styles.reg}>
@@ -226,7 +227,7 @@ class LoginPage extends Component {
                                 <View>
                                     {
                                         this.state.inLogin ?
-                                            <View style={[styles.loginBtn, {backgroundColor: '#0764FF'}]}>
+                                            <View style={[styles.loginBtn, {backgroundColor: '#2d78f4'}]}>
                                                 <Text style={{color: 'white', fontSize: 16}}>登录中</Text>
                                             </View> :
                                             <TouchableOpacity onPress={this._login.bind(this)} style={styles.loginBtn}>

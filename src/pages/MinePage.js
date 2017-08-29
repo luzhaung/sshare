@@ -26,7 +26,7 @@ import {NavigationActions} from 'react-navigation'
 const CANCEL_INDEX = 0;
 const DESTRUCTIVE_INDEX = 1;
 const options = ['取消', '退出'];
-const title = '确认退出吗';
+const title = '确定退出吗';
 
 const {height, width} = Dimensions.get('window');
 const styles = StyleSheet.create({
@@ -199,7 +199,8 @@ const styles = StyleSheet.create({
 class MinePage extends Component {
     static navigationOptions = {
         title: '我的',
-        tabBarLabel: '我的',
+        headerLeft: null,
+        headerBackTitle: null,
         headerStyle: {
             backgroundColor: '#fff',
             height: 50
@@ -315,14 +316,14 @@ class MinePage extends Component {
                                         <View style={styles.toLogin}>
                                             <Text>{userInfo.username}</Text>
                                         </View>
-                                        <View style={styles.sign}>
+                                        {/*<View style={styles.sign}>
                                             <TouchableOpacity
                                                 onPress={this.onPress.bind(this)}
                                                 style={styles.signButton}
                                             >
                                                 <Text style={styles.signText}>签到</Text>
                                             </TouchableOpacity>
-                                        </View>
+                                        </View>*/}
                                     </TouchableOpacity>
                                     :
                                     <TouchableOpacity

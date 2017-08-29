@@ -95,7 +95,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         height: 50,
         paddingTop: 25,
-        paddingLeft: 10,
         paddingRight: 10,
         borderBottomWidth: 0.3,
         borderBottomColor: '#9B9B9B',
@@ -106,7 +105,8 @@ const styles = StyleSheet.create({
 class CreatePage extends Component {
 
     static navigationOptions =({ navigation, screenProps })=> ({
-        title: '发表',
+        tabBarLabel: '发表',
+        header: null,
         /*tabBarLabel: '发表',
         headerLeft: <View style={styles.cancel_create}>
             <Text onPress={this.cancel}>取消</Text>
@@ -191,14 +191,14 @@ class CreatePage extends Component {
         this.setState({
             modalVisible: false,
         });
-        //const backAction = NavigationActions.back();
-        //this.props.navigation.dispatch(backAction);
-        this.props.navigation.dispatch(NavigationActions.reset({
+        const backAction = NavigationActions.back();
+        this.props.navigation.dispatch(backAction);
+        /*this.props.navigation.dispatch(NavigationActions.reset({
             index: 0,
             actions: [
                 NavigationActions.navigate({routeName: 'myTabNavigator'})
             ]
-        }));
+        }));*/
     }
 
     pickMultiple() {
@@ -263,7 +263,7 @@ class CreatePage extends Component {
                             style={{textAlign: 'center', fontWeight: 'bold'}}>发状态</Text></View>
                         <View style={styles.sendBtn}>
                             <TouchableOpacity onPress={this.send}>
-                                <Text style={{textAlign: 'right', color: '#ffd100'}}>发送</Text>
+                                <Text style={{textAlign: 'right', color: '#2d78f4'}}>发送</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
