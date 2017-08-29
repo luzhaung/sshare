@@ -11,3 +11,4 @@ export const LogoutlUrl = 'https://www.shiqidu.com/api/user/logout';
 export const getAccessToken = 'https://www.shiqidu.com/api/user/get_user_info';
 export const uploadImage = 'https://www.shiqidu.com/api/user/upload_image';
 export const sendPost = 'https://www.shiqidu.com/api/article/send_post';
+export const PostList = 'https://www.shiqidu.com/api/post/post_list';

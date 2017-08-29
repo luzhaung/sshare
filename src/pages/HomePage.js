@@ -18,9 +18,9 @@ import {
     ActivityIndicator
 } from 'react-native';
 
+import {FeedList} from '../component/FeedList'
 import Icon from 'react-native-vector-icons/Ionicons';
 //import Markdown from 'react-native-simple-markdown';
-
 const {height, width} = Dimensions.get('window');
 
 export default class HomePage extends Component {
@@ -28,7 +28,7 @@ export default class HomePage extends Component {
         title: '首页',
         headerLeft: null,
         headerBackTitle: null,
-        headerRight: <Icon name="ios-search" size={22} style={{marginRight: 10}}/>,
+        // headerRight: <Icon name="ios-search" size={22} style={{marginRight: 10}}/>,
         headerStyle: {
             backgroundColor: '#fff',
             height: 50
@@ -46,6 +46,7 @@ export default class HomePage extends Component {
     };
 
     componentWillMount() {
+        console.log(FeedList);
         /*const {navigate} = this.props.navigation;
         navigate('LoginRegPage');*/
     }
@@ -54,7 +55,7 @@ export default class HomePage extends Component {
         const {navigate} = this.props.navigation;
         return (
             <View style={styles.container}>
-                <Text>首页</Text>
+                <FeedList/>
             </View>
         )
     }
@@ -64,7 +65,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 10,
-        backgroundColor: '#fff'
+        /*backgroundColor: '#fff'*/
     },
     icon: {}
 });
