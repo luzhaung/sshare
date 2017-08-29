@@ -15,3 +15,11 @@ export function isLogin(callback) {
         }
     });
 }
+
+
+export function getToken(callback) {
+    AsyncStorage.getItem('token', (err, result) => {
+        console.log(result);
+        callback(result);
+    });
+}

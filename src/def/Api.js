@@ -9,4 +9,5 @@ export const CommentlUrl = 'https://www.shiqidu.com/api/article/get_article_comm
 export const LoginlUrl = 'https://www.shiqidu.com/api/user/login';
 export const LogoutlUrl = 'https://www.shiqidu.com/api/user/logout';
 export const getAccessToken = 'https://www.shiqidu.com/api/user/get_user_info';
-export const uploadImage = 'https://www.shiqidu.com/Api/Public/upload_image';
+export const uploadImage = 'https://www.shiqidu.com/api/user/upload_image';
+export const sendPost = 'https://www.shiqidu.com/api/article/send_post';
