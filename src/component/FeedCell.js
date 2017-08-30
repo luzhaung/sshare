@@ -93,6 +93,17 @@ const styles = StyleSheet.create({
         marginRight: imgInterval,
         backgroundColor: '#e7edf3',
     },
+    feedContentImageOne: {
+        height: 200,
+        width: (windowWidth - margin * 2),
+        backgroundColor: '#e7edf3'
+    },
+    feedContentImageTwo: {
+        height: 150,
+        width: (windowWidth - margin * 2 - imgInterval) / 2,
+        marginRight: imgInterval,
+        backgroundColor: '#e7edf3'
+    },
     feedActions: {
         //borderWidth: 1,
         //borderTopColor: '#EEEEEE',
@@ -151,12 +162,20 @@ export default class FeedCell extends Component{
         if(content === null) return [];
         let images = content.split(",");
         let imagesView = [];
+        let imgStyle = styles.feedContentImage;
         for(let i=0; i<images.length; i++) {
+            if (images.length === 1){
+                imgStyle = styles.feedContentImageOne;
+            }else if (images.length === 2){
+                imgStyle = styles.feedContentImageTwo;
+            }else{
+                imgStyle = styles.feedContentImage;
+            }
             imagesView.push(
                 <TouchableOpacity
                     onPress={()=>this.props.navigation.navigate('ImageShow',{index: i, imageUrls:imageUrls})}
                     key={i}>
-                    <Image source={{uri: images[i]}} style={styles.feedContentImage} key={i}/>
+                    <Image source={{uri: images[i]}} style={imgStyle} key={i}/>
                 </TouchableOpacity>
             );
         }
