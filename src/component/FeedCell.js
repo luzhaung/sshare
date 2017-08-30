@@ -25,9 +25,6 @@ const styles = StyleSheet.create({
         marginBottom: 0,
         paddingBottom: 10,
         backgroundColor: 'white',
-        //borderTopWidth: 0.5,
-        borderBottomWidth: 0.5,
-        borderColor: '#EEEEEE',
     },
     feedHeader: {
         flex: 1,
@@ -127,7 +124,7 @@ const renderFeedImages = (content) => {
     let images = content.split(",");
     let imagesView = [];
     for(let i=0; i<images.length; i++) {
-        console.log(images[i]);
+
         imagesView.push(<Image source={{uri: images[i]}} style={styles.feedContentImage} key={i}/>);
     }
 
@@ -156,7 +153,6 @@ const renderCommentList = () => {
 };
 
 const FeedCell = (props) =>{
-    console.log(props);
     const {feed,pressAvatar,selectFeed} = props;
     return (
         <View>

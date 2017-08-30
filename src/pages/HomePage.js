@@ -46,7 +46,6 @@ export default class HomePage extends Component {
     };
 
     componentWillMount() {
-        console.log(FeedList);
         /*const {navigate} = this.props.navigation;
         navigate('LoginRegPage');*/
     }
@@ -64,8 +63,6 @@ export default class HomePage extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 10,
-        /*backgroundColor: '#fff'*/
     },
     icon: {}
 });

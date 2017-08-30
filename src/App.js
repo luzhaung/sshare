@@ -64,7 +64,7 @@ class Sshare extends Component {
     }
 
     componentWillMount() {
-        console.log(this.props)
+        console.log(this.props);
         isLogin((result, token) => {
             if (result) {
                 console.log('已登录');

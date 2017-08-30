@@ -1210,6 +1210,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.sshare.;
 				PRODUCT_NAME = sshare;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1236,6 +1237,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.sshare.;
 				PRODUCT_NAME = sshare;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

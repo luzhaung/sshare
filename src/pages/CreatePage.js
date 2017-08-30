@@ -29,7 +29,7 @@ const windowHeight = Dimensions.get('window').height;
 const margin = 20;
 const imgInterval = 5;
 const imgCountLimit = 9;
-const textLengthLimit = 140;
+const textLengthLimit = 200;
 const styles = StyleSheet.create({
     container: {
         backgroundColor: '#fff',
@@ -197,8 +197,6 @@ class CreatePage extends Component {
             console.log('==============是否显示CreateModal==============');
             console.log(createModalStore.showCreateModal);
             this.showModal();
-        } else if (loginModalStore.isLogout) {
-
         } else if (loginModalStore.showLoginModal) {
             console.log('显示登录modal');
             this.props.navigation.navigate('LoginPage');
@@ -209,17 +207,6 @@ class CreatePage extends Component {
         console.log('componentWillMount')
     }
 
-    componentDidMount() {
-        /*this.props.navigation.setParams({
-            title:'自定义Header',
-            navigatePress:this.navigatePress
-        })*/
-    }
-
-    /*navigatePress = () => {
-        alert('点击headerRight');
-        console.log(this.props.navigation);
-    };*/
     showModal = () => {
         this.setState({
             modalVisible: true,
@@ -227,20 +214,16 @@ class CreatePage extends Component {
     };
 
     cancel = () => {
-        //this.props.navigation.goBack();
-        /*this.setState({
+        this.setState({
             modalVisible: false,
-            goBack: true
-        });*/
-        //this.props.navigation.dispatch(NavigationActions.back());
-        //const backAction = NavigationActions.back();
-        //this.props.navigation.dispatch(backAction);
-        this.props.navigation.dispatch(NavigationActions.reset({
+        });
+        /*this.props.navigation.dispatch(NavigationActions.reset({
             index: 0,
             actions: [
                 NavigationActions.navigate({routeName: 'myTabNavigator'})
             ]
-        }));
+        }));*/
+        this.props.navigation.goBack();
     };
 
     pickMultiple() {
@@ -395,8 +378,7 @@ class CreatePage extends Component {
     };
 
     render() {
-        const {navigate} = this.props.navigation;
-        //console.log(navigate);
+        //const {navigate} = this.props.navigation;
         const {uploading} = this.state;
         return (
             <View>
@@ -434,10 +416,11 @@ class CreatePage extends Component {
                                     style={styles.multiline}
                                     placeholder="说点什么吧..."
                                     returnKeyType="next"
-                                    autoFocus={true}
+                                    autoCorrect={false}
+                                    /*autoFocus={true}*/
                                     multiline={true}
                                     keyboardType='twitter'
-                                    maxLength={140}
+                                    maxLength={200}
                                     value={this.state.text}
                                     onChangeText={(text) => this.setState({text})}
                                 />
@@ -496,4 +479,4 @@ const mapStateToProps = (state) => {
     }
 };
 
-export default connect(mapStateToProps)(CreatePage);
+export default connect(mapStateToProps, null)(CreatePage);

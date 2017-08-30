@@ -17,6 +17,7 @@ import {
     ActivityIndicator
 } from 'react-native';
 import FeedCell from './FeedCell';
+import Separator from './Separator';
 import {PostList} from '../def/Api';
 
 const windowWidth = Dimensions.get('window').width;
@@ -24,6 +25,7 @@ const windowWidth = Dimensions.get('window').width;
 
 export default class FeedList extends Component {
     state = {selected: (new Map(): Map<string, boolean>)};
+    renderSeparator=Separator;
     page = 1;
     rows = 20;
     constructor(props) {
@@ -70,9 +72,8 @@ export default class FeedList extends Component {
             .then((response) => response.text())
             .then((responseText) => {
                 const json = JSON.parse(responseText);
-                console.log(json);
                 if (json.status === -1) {
-                    Alert.alert('', json.info);
+                    //Alert.alert('', json.info);
                     this.setState({
                         refreshing: false,
                     });
@@ -99,7 +100,7 @@ export default class FeedList extends Component {
     };
 
     fetchEmpty = ()=>{
-        console.log('fetchEmpty')
+        console.log('fetchEmpty');
         setTimeout(function () {
             return {loading:true}
         }, 100)
@@ -115,7 +116,7 @@ export default class FeedList extends Component {
         }
     };
 
-    _keyExtractor = (item, index) => item.id;
+    _keyExtractor = (item, index) => 'post_' + item.id;
 
     _renderItem = ({item}) => {
         return (<FeedCell
@@ -134,11 +135,12 @@ export default class FeedList extends Component {
                 renderItem={this._renderItem}
                 onRefresh={this.freshData}
                 onEndReached={this.fetchMore}
-                onEndReachedThreshold={0}
+                onEndReachedThreshold={0.1}
                 refreshing={this.state.refreshing}
                 ListFooterComponent={() => {
                     return this.state.refreshing && <ActivityIndicator size="large"/>
                 }}
+                ItemSeparatorComponent={this.renderSeparator}
             />
         )
     }
