@@ -11,6 +11,7 @@ import Create from './pages/CreatePage';
 import Mine from './pages/MinePage';
 import LoginPage from './pages/LoginPage';
 import AboutPage from './pages/AboutPage';
+import ImageShow from './component/ImageShow';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
@@ -42,6 +43,9 @@ const MyApp = StackNavigator({
     },
     AboutPage: {
         screen: AboutPage
+    },
+    ImageShow: {
+        screen: ImageShow
     }
 }, {
     headerMode: 'screen',

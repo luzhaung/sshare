@@ -10,11 +10,13 @@ import {
     Text,
     ScrollView,
     TouchableOpacity,
+    TouchableWithoutFeedback,
     View,
     Dimensions
 } from 'react-native';
-import {PRIMARY_COLOR} from "../def/Color";
 
+import {PRIMARY_COLOR} from "../def/Color";
+import ImageShow from './ImageShow';
 const windowWidth = Dimensions.get('window').width;
 const margin = 20;
 const imgInterval = 5;
@@ -52,7 +54,16 @@ const styles = StyleSheet.create({
         lineHeight: 12,
         marginTop: 5,
     },
-
+    followView: {
+        position:'absolute',
+        right:0,
+        marginTop:3
+    },
+    followText: {
+        fontSize: 12,
+        fontWeight: 'bold',
+        color: PRIMARY_COLOR
+    },
     feedContent: {
         flex: 1,
     },
@@ -61,7 +72,7 @@ const styles = StyleSheet.create({
         textAlign: 'justify',
         margin: margin,
         marginTop: -10,
-        fontSize: 16,
+        fontSize: 14,
         color: '#333333',
         lineHeight: 20,
     },
@@ -119,68 +130,92 @@ const styles = StyleSheet.create({
     }
 });
 
-const renderFeedImages = (content) => {
-    if(content === null) return [];
-    let images = content.split(",");
-    let imagesView = [];
-    for(let i=0; i<images.length; i++) {
-
-        imagesView.push(<Image source={{uri: images[i]}} style={styles.feedContentImage} key={i}/>);
+export default class FeedCell extends Component{
+    constructor(pros){
+        super(pros);
+        console.log(pros);
     }
 
-    return imagesView;
-};
+    imageShow = (imageUrls) => {
+        if(imageUrls === null) return [];
+        let images = imageUrls.split(",");
+        let imageUrl = [];
+        for (let img of images){
+            imageUrl.push({url: img});
+        }
+        return imageUrl;
+    };
 
-const renderFeedContent = (feed) => {
-    if (feed.excerpt === null || feed.excerpt.length === 0) {
+    renderFeedImages = (content) => {
+        let imageUrls = this.imageShow(content);
+        if(content === null) return [];
+        let images = content.split(",");
+        let imagesView = [];
+        for(let i=0; i<images.length; i++) {
+            imagesView.push(
+                <TouchableOpacity
+                    onPress={()=>this.props.navigation.navigate('ImageShow',{index: i, imageUrls:imageUrls})}
+                    key={i}>
+                    <Image source={{uri: images[i]}} style={styles.feedContentImage} key={i}/>
+                </TouchableOpacity>
+            );
+        }
+
+        return imagesView;
+    };
+
+    renderFeedContent = (feed) => {
+        if (feed.excerpt === null || feed.excerpt.length === 0) {
+            return (
+                <View style={styles.feedContentImages}>{this.renderFeedImages(feed.images)}</View>
+            );
+        }
         return (
-            <View style={styles.feedContentImages}>{renderFeedImages(feed.images)}</View>
+            <View>
+                <Text style={styles.feedContentText}>{feed.excerpt}</Text>
+                <View style={styles.feedContentImages}>{this.renderFeedImages(feed.images)}</View>
+            </View>
         );
+    };
+
+    renderCommentList = () => {
+        return (
+            <View style={{flex: 1}}>
+            </View>
+        );
+    };
+
+    render(){
+        const {feed, pressAvatar, selectFeed} = this.props;
+        return (
+            <View>
+                <TouchableWithoutFeedback
+                    onPress={selectFeed}>
+                    <View style={styles.container}>
+                        <View style={styles.feedHeader}>
+                            <View>
+                                <TouchableOpacity onPress={pressAvatar}>
+                                    <Image
+                                        source={{uri: feed.author_avatar}}
+                                        style={styles.avatar}/>
+                                </TouchableOpacity>
+                            </View>
+                            <View style={styles.feedUserInfo}>
+                                <Text style={styles.feedUserName}>{feed.username}</Text>
+                                <Text style={styles.feedTime}>{feed.timeFormat}</Text>
+                            </View>
+                            <View style={styles.followView}>
+                                <TouchableOpacity><Text style={styles.followText}>+关注</Text></TouchableOpacity>
+                            </View>
+                        </View>
+                        <View style={styles.feedContent}>
+                            {this.renderFeedContent(feed)}
+                        </View>
+                        {/*{this.renderCommentList()}*/}
+                    </View>
+                </TouchableWithoutFeedback>
+            </View>
+        )
     }
-    return (
-        <View>
-            <Text style={styles.feedContentText}>{feed.excerpt}</Text>
-            <View style={styles.feedContentImages}>{renderFeedImages(feed.images)}</View>
-        </View>
-    );
-};
+}
 
-const renderCommentList = () => {
-    return (
-        <View style={{flex: 1}}>
-        </View>
-    );
-};
-
-const FeedCell = (props) =>{
-    const {feed,pressAvatar,selectFeed} = props;
-    return (
-        <View>
-            <TouchableOpacity
-                onPress={selectFeed}>
-                <View style={styles.container}>
-                    <View style={styles.feedHeader}>
-                        <View>
-                            <TouchableOpacity onPress={pressAvatar}>
-                                <Image
-                                    source={{uri: feed.author_avatar}}
-                                    style={styles.avatar}/>
-                            </TouchableOpacity>
-                        </View>
-                        <View style={styles.feedUserInfo}>
-                            <Text style={styles.feedUserName}>{feed.username}</Text>
-                            <Text style={styles.feedTime}>{feed.timeFormat}</Text>
-                            {/* <Text style={styles.feedTime}>{this.props.feed.id+' '+this.props.page}</Text> */}
-                        </View>
-                    </View>
-                    <View style={styles.feedContent}>
-                        {renderFeedContent(feed)}
-                    </View>
-                    {/*{this.renderCommentList()}*/}
-                </View>
-            </TouchableOpacity>
-        </View>
-    )
-};
-
-export default FeedCell;

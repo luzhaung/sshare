@@ -44,17 +44,16 @@ export default class HomePage extends Component {
                 <Icon name="ios-home-outline" size={22} color={tintColor} style={styles.icon}/>
         ),
     };
-
-    componentWillMount() {
-        /*const {navigate} = this.props.navigation;
-        navigate('LoginRegPage');*/
+    constructor(props){
+        super(props);
+        console.log(props);
     }
 
     render() {
-        const {navigate} = this.props.navigation;
+        const {navigation} = this.props;
         return (
             <View style={styles.container}>
-                <FeedList/>
+                <FeedList navigation={navigation}/>
             </View>
         )
     }

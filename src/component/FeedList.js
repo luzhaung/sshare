@@ -49,11 +49,11 @@ export default class FeedList extends Component {
     }
 
     selectFeed = (feed, avatarCanClick = true) => {
-        Alert.alert('loading');
+        console.log('loading');
     };
 
     pressAvatar = (feed) => {
-        Alert.alert('loading');
+        console.log('loading');
     };
 
     componentWillReceiveProps(nextProps) {
@@ -123,6 +123,7 @@ export default class FeedList extends Component {
             selectFeed={this.selectFeed}
             pressAvatar={this.pressAvatar}
             feed={item}
+            navigation={this.props.navigation}
                 />);
     };
 
