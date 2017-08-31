@@ -284,7 +284,7 @@ class MinePage extends Component {
                         userInfo: jsonData.data,
                     })
                 }else{
-                    AsyncStorage.setItem('token', '');
+                    await AsyncStorage.setItem('token', '');
                 }
             }
         }
