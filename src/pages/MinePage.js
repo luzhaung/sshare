@@ -275,13 +275,16 @@ class MinePage extends Component {
             // 判断是否登录[getAccessToken]
             const access_token = await AsyncStorage.getItem('token');
             if (access_token) {
-                const comments = await fetch(`${getAccessToken}?sess_id=${access_token}`);
-                let jsonData = await comments.json();
+                const response = await fetch(`${getAccessToken}?sess_id=${access_token}`);
+                console.log(response);
+                let jsonData = await response.json();
                 if (jsonData.status === 1) {
                     this.setState({
                         isLogin: true,
                         userInfo: jsonData.data,
                     })
+                }else{
+                    AsyncStorage.setItem('token', '');
                 }
             }
         }
